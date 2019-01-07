@@ -142,7 +142,7 @@ required-attributes=
 
 # Regular expression which should only match functions or classes name which do
 # not require a docstring
-no-docstring-rgx=__.*__
+no-docstring-rgx=(__.*__)|(main|rhino)
 
 # Regular expression which should only match correct module names
 module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
@@ -173,7 +173,7 @@ variable-rgx=[a-z_][a-z0-9_]{2,30}$
 inlinevar-rgx=[A-Za-z_][A-Za-z0-9_]*$
 
 # Good variable names which should always be accepted, separated by a comma
-good-names=i,j,k,ex,Run,_
+good-names=x,y,z,i,j,n,k,ex,Run,_
 
 # Bad variable names which should always be refused, separated by a comma
 bad-names=foo,bar,baz,toto,tutu,tata
@@ -293,7 +293,7 @@ notes=FIXME,XXX,TODO
 [FORMAT]
 
 # Maximum number of characters on a single line.
-max-line-length=80
+max-line-length=90
 
 # Maximum number of lines in a module
 max-module-lines=1000
