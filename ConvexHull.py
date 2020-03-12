@@ -4,24 +4,47 @@ SEE: https://www.designcoding.net/convex-hull-with-rhino-python/
 """
 import rhinoscriptsyntax as rs
 
-def main():
-  points = rs.GetPointCoordinates("Select points")
+def main(points, plane, close_hull=True):
+  if not points:
+    return False
+
+  if not plane:
+    return False
+
+  plane_x = 0
+  plane_y = 1
+
+  current = min(points)
+  start = current
+  hull = []
+
+  while current:
+    origin = current
+    current = points[0]
+    for candidate in points:
+      if (current[plane_x] - origin[plane_x]) * (candidate[plane_y] - origin[plane_y]) - (current[plane_y] - origin[plane_y]) * (candidate[plane_x] - origin[plane_x]) < 0:
+        current = candidate
+    hull.append(current)
+    if current == start:
+      break
+
+  if close_hull:
+    hull.append(hull[0])
+
+  return hull
+
+def rhino():
+  points = rs.GetPointCoordinates("Select points", preselect=True)
   if not points:
     return
 
-  a = min(points)
-  start = a
+  plane = rs.ViewCPlane()
+  if not plane:
+    return
 
-  while a:
-    o = a
-    a = points[0]
-    for b in points:
-      if (a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]) < 0:
-        a = b
-    rs.AddLine(o, a)
-    if a == start:
-      break
-  return
+  hull = main(points, plane, close_hull=True)
+  if hull:
+    rs.AddPolyline(hull)
 
 if __name__ == '__main__':
-  main()
+  rhino()
