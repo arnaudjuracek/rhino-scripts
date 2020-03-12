@@ -10,7 +10,7 @@ def CreateShortcut():
     if( not rs.IsRunningOnWindows() ):
         rs.MessageBox("CreateShortcut.py only runs on Windows", 48, "Script Error")
         return
-
+    
     # Get the document name and path
     name = rs.DocumentName()
     path = rs.DocumentPath()
