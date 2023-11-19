@@ -1,6 +1,7 @@
-"""Export selected objects to STL file, grouped by layer name"""
+"""Export selected objects to STL file, one file by layer"""
 import os
 import re
+import time
 import unicodedata
 import rhinoscriptsyntax as rs
 
@@ -14,14 +15,19 @@ def slugify(value):
   value = re.sub('[^\w\s-]', '', value).strip().lower()
   return re.sub('[-\s]+', '-', value)
 
-def export_each_to_stl():
-  """export_each_to_stl"""
+def export_to_stl():
+  """export_to_stl"""
   objects = rs.GetObjects("Select objects to export", 0, True, True)
   if not objects:
     return
 
   layers = {}
+
+  timestamp = rs.GetBoolean("Prefix files with timestamp ?", ("Timestamp", "No", "Yes"), (False))[0]
+
   ns = os.path.splitext(os.path.basename(rs.DocumentName()))[0] + '_'
+  if timestamp:
+    ns = time.strftime("%Y%m%d%H%M%S") + '_' + ns
 
   for obj in objects:
     layer = rs.ObjectLayer(obj)
@@ -42,4 +48,4 @@ def export_each_to_stl():
     rs.Command("_-Export " + chr(34) + filename + chr(34) + " _Enter", False)
 
 if __name__ == '__main__':
-  export_each_to_stl()
+  export_to_stl()
